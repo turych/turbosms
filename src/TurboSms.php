@@ -2,15 +2,25 @@
 
 namespace TurboSms;
 
+use TurboSms\Gateway;
+
 class TurboSms
 {
     protected $gateway;
 
     public function __construct($auth, $gateway)
     {
-        $gateway_name = ucfirst($gateway)."Gateway";
+        $gateway_name = "\\TurboSms\\Gateway\\" . ucfirst($gateway);
         $this->gateway = new $gateway_name($auth);
         $this->gateway->authenticate();
+    }
+
+    /**
+     * @return int
+     */
+    public function getBalance()
+    {
+        return $this->gateway->getBalance();
     }
 
     /**
@@ -24,6 +34,6 @@ class TurboSms
      */
     public function send($sms)
     {
-        $this->gateway->SendSMS($sms);
+        return $this->gateway->sendSMS($sms);
     }
 }
